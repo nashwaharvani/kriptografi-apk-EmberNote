@@ -1,7 +1,10 @@
 """EmberNote - Pesan dan foto rahasia sekali baca berbasis AES-256-GCM (Streamlit)."""
+import gc
+import os
+import tempfile
+import threading
 import time
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
 import streamlit as st
 
@@ -12,20 +15,99 @@ from modules import payload, selftest, storage, visual
 st.set_page_config(page_title="EmberNote", page_icon="🔥", layout="centered")
 tema.apply_theme()
 
-LOGO = Path(__file__).parent / "images" / "logo.png"
 MAX_CHARS = payload.MAX_TEXT_CHARS
 DURATIONS = {"5 menit": 300, "1 jam": 3600, "24 jam": 86400, "7 hari": 604800}
-PAGES = ["🔥 Buat Pesan", "📖 Baca Pesan", "🛡️ Bukti Keamanan", "ℹ️ Tentang"]
+PAGES = ["🏠 Beranda", "🔥 Buat Pesan", "📖 Baca Pesan", "🛡️ Bukti Keamanan", "ℹ️ Tentang"]
 WIB = timezone(timedelta(hours=7))
+SELFTEST_LOCK = threading.Lock()
 
 
 def fmt_time(ts: int) -> str:
     return datetime.fromtimestamp(ts, WIB).strftime("%d %b %Y %H:%M:%S WIB")
 
 
+def go_to_create() -> None:
+    st.session_state.page = PAGES[1]
+
+
+def run_security_tests():
+    if os.name != "nt":
+        return selftest.run_all()
+
+    with SELFTEST_LOCK:
+        temporary_directory = tempfile.TemporaryDirectory
+
+        class RetryingTemporaryDirectory(temporary_directory):
+            def cleanup(self):
+                try:
+                    super().cleanup()
+                except PermissionError:
+                    # Python 3.14 may release SQLite's temporary DB handle after collection.
+                    gc.collect()
+                    time.sleep(0.1)
+                    super().cleanup()
+
+        tempfile.TemporaryDirectory = RetryingTemporaryDirectory
+        try:
+            return selftest.run_all()
+        finally:
+            tempfile.TemporaryDirectory = temporary_directory
+
+
+# ------------------------------------------------------------------- Beranda
+def page_home():
+    st.markdown(
+        """
+<div class="en-hero">
+  <h2>EmberNote: pesan dan foto rahasia yang hangus setelah dibaca</h2>
+  <p>🎮 Misi rahasiamu dimulai di sini. Enkripsi pesan, bagikan kunci dengan aman, lalu biarkan pesan menghilang.</p>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.button("▶️ PLAY / MULAI", type="primary", on_click=go_to_create)
+
+    st.subheader("💡 Apa ini?")
+    st.markdown(
+        """
+<div class="en-card">
+  <p>EmberNote mengirim pesan atau foto rahasia yang dilindungi enkripsi. Pesan hanya bisa dibuka sekali, lalu dihapus dari server. Server menyimpan data terenkripsi, jadi tidak bisa membaca isi pesan tanpa kuncinya.</p>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("🗺️ Cara main")
+    st.markdown(
+        """
+<div class="en-missions">
+  <div class="en-card"><h3>🎯 Misi 1</h3><p>Tulis pesan dan/atau pilih foto untuk dienkripsi.</p></div>
+  <div class="en-card"><h3>🧩 Misi 2</h3><p>Bagikan ID dan Kunci lewat dua jalur berbeda.</p></div>
+  <div class="en-card"><h3>🔥 Misi 3</h3><p>Penerima buka sekali, lalu pesan hangus.</p></div>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("⚡ Booster keamanan")
+    st.markdown(
+        """
+<div class="en-stats">
+  <div class="en-card en-stat"><strong>🔐 AES-256-GCM</strong><span>Enkripsi terautentikasi</span></div>
+  <div class="en-card en-stat"><strong>🗝️ 256-bit</strong><span>Kunci acak</span></div>
+  <div class="en-card en-stat"><strong>🔥 Sekali baca</strong><span>Lalu dihapus</span></div>
+  <div class="en-card en-stat"><strong>⭐ 13 pengujian</strong><span>Bukti keamanan</span></div>
+</div>
+<p class="en-note">📚 EmberNote adalah proyek pembelajaran kriptografi, bukan alat keamanan untuk produksi.</p>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 # ---------------------------------------------------------------- Buat pesan
 def page_create():
-    st.header("🔥 Buat Pesan Rahasia Sekali Baca")
+    st.title("🏅 Level 1 · Buat Pesan")
+    st.caption("🔥 Buat Pesan Rahasia Sekali Baca")
     st.caption("Pesan dan/atau foto dienkripsi dengan AES-256-GCM, dibuka sekali, lalu hangus.")
 
     with st.form("form_buat", clear_on_submit=True):
@@ -92,7 +174,8 @@ def page_create():
 
 # ---------------------------------------------------------------- Baca pesan
 def page_read():
-    st.header("📖 Baca Pesan Rahasia")
+    st.title("🏅 Level 2 · Baca Pesan")
+    st.caption("📖 Baca Pesan Rahasia")
 
     revealed = st.session_state.get("revealed")
     if revealed is not None:
@@ -138,24 +221,32 @@ def page_read():
 
 # ----------------------------------------------------------- Bukti keamanan
 def page_proof():
-    st.header("🛡️ Bukti Keamanan")
+    st.title("🏆 Achievements · Bukti Keamanan")
     st.write(
         "Halaman ini menjalankan pengujian langsung untuk menunjukkan bahwa **satu algoritma, "
         "AES-256-GCM, sudah mencukupi**: menjaga kerahasiaan teks dan foto, mendeteksi data yang "
         "diubah, dan melindungi metadata, tanpa hash atau cipher tambahan."
     )
     if st.button("▶️ Jalankan semua pengujian", type="primary"):
-        results = selftest.run_all()
+        results = run_security_tests()
         passed = sum(r["Hasil"] == "LULUS" for r in results)
         (st.success if passed == len(results) else st.error)(
             f"{passed} dari {len(results)} pengujian lulus."
         )
-        st.table(results)
+        for index in range(0, len(results), 2):
+            columns = st.columns(2)
+            for offset, (column, result) in enumerate(zip(columns, results[index:index + 2])):
+                with column:
+                    with st.container(border=True, key=f"proof-result-{index + offset}"):
+                        passed_test = result["Hasil"] == "LULUS"
+                        st.subheader(f"{'⭐' if passed_test else '⚠️'} {result['Pengujian']}")
+                        (st.success if passed_test else st.error)(result["Hasil"])
+                        st.caption(result["Keterangan"])
 
 
 # ------------------------------------------------------------------- Tentang
 def page_about():
-    st.header("ℹ️ Tentang EmberNote")
+    st.title("ℹ️ Tentang EmberNote")
     st.markdown(
         """
 **EmberNote** adalah aplikasi pesan dan foto rahasia sekali baca (*burn-after-reading*).
@@ -175,30 +266,42 @@ def page_about():
 *Proyek pembelajaran kriptografi, bukan alat keamanan untuk produksi.*
         """
     )
-    with st.expander("⚠️ Batasan & ancaman yang tidak ditangani"):
-        st.markdown(
-            """
-- **Bukan E2EE murni**: kunci dibuat dan dipakai di server saat pesan dibuat/dibuka.
-- Siapa pun yang memegang **ID + kunci** dapat membuka pesan, jadi kirim keduanya lewat jalur berbeda.
-- **Panjang pesan, ukuran foto, ID, dan waktu** tidak tersembunyi.
-- Foto tidak dibersihkan dari metadata (EXIF/lokasi); hapus dulu bila perlu.
-- Tidak ada pembatasan spam/percobaan (menebak kunci 256-bit tetap mustahil).
-- Penyimpanan Streamlit Cloud bersifat sementara.
-- Plaintext tetap ada di sesi browser sampai pesan ditutup.
-- Belum diaudit pihak independen.
-            """
-        )
+    st.subheader("⚠️ Batasan & ancaman yang tidak ditangani")
+    st.markdown(
+        """
+<div class="en-limits">
+  <div class="en-card"><h3>🖥️ Bukan E2EE murni</h3><p>Kunci dibuat dan dipakai di server saat pesan dibuat atau dibuka.</p></div>
+  <div class="en-card"><h3>🗝️ Jaga kuncinya</h3><p>Siapa pun yang memegang ID dan kunci dapat membuka pesan. Kirim keduanya lewat jalur berbeda.</p></div>
+  <div class="en-card"><h3>👀 Metadata terlihat</h3><p>Panjang pesan, ukuran foto, ID, dan waktu tidak tersembunyi.</p></div>
+  <div class="en-card"><h3>📷 Metadata foto</h3><p>EXIF atau lokasi di foto tidak dibersihkan; hapus terlebih dahulu bila perlu.</p></div>
+  <div class="en-card"><h3>🚦 Batas percobaan</h3><p>Belum ada pembatasan spam atau percobaan; menebak kunci 256-bit tetap tidak praktis.</p></div>
+  <div class="en-card"><h3>☁️ Penyimpanan sementara</h3><p>Penyimpanan Streamlit Cloud bersifat sementara.</p></div>
+  <div class="en-card"><h3>📱 Sesi browser</h3><p>Plaintext tetap ada di sesi browser sampai pesan ditutup.</p></div>
+  <div class="en-card"><h3>🔎 Belum diaudit</h3><p>Aplikasi belum diaudit oleh pihak independen.</p></div>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 if "page" not in st.session_state:
-    st.session_state.page = PAGES[1] if "id" in st.query_params else PAGES[0]
+    st.session_state.page = PAGES[2] if "id" in st.query_params else PAGES[0]
 
-if LOGO.exists():
-    st.sidebar.image(str(LOGO), width=96)
-st.sidebar.title("EmberNote")
-choice = st.sidebar.radio("Menu", PAGES, key="page")
-st.sidebar.caption("AES-256-GCM • Teks & foto sekali baca")
+st.markdown(
+    """
+<div class="en-navbar-brand">
+  <strong>🔥 EmberNote</strong>
+  <span>Pesan &amp; foto rahasia · AES-256-GCM</span>
+</div>
+    """,
+    unsafe_allow_html=True,
+)
+choice = st.radio("Menu", PAGES, key="page", horizontal=True, label_visibility="collapsed")
 
-tema.hero("EmberNote", "Pesan dan foto rahasia sekali baca, dilindungi satu algoritma.",
-          ("AES-256-GCM", "Sekali baca", "AAD"))
-{PAGES[0]: page_create, PAGES[1]: page_read, PAGES[2]: page_proof, PAGES[3]: page_about}[choice]()
+{
+    PAGES[0]: page_home,
+    PAGES[1]: page_create,
+    PAGES[2]: page_read,
+    PAGES[3]: page_proof,
+    PAGES[4]: page_about,
+}[choice]()
