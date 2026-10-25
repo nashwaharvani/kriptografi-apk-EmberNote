@@ -28,6 +28,24 @@ def fmt_time(ts: int) -> str:
 
 def go_to_create() -> None:
     st.session_state.page = PAGES[1]
+    st.session_state.sidebar_page = PAGES[1]
+    st.session_state.top_page = PAGES[1]
+
+
+def go_to_read() -> None:
+    st.session_state.page = PAGES[2]
+    st.session_state.sidebar_page = PAGES[2]
+    st.session_state.top_page = PAGES[2]
+
+
+def sync_top_page() -> None:
+    st.session_state.page = st.session_state.top_page
+    st.session_state.sidebar_page = st.session_state.top_page
+
+
+def sync_sidebar_page() -> None:
+    st.session_state.page = st.session_state.sidebar_page
+    st.session_state.top_page = st.session_state.sidebar_page
 
 
 def run_security_tests():
@@ -58,64 +76,57 @@ def run_security_tests():
 def page_home():
     st.markdown(
         """
-<div class="en-hero">
-  <h2>EmberNote: pesan dan foto rahasia yang hangus setelah dibaca</h2>
-  <p>🎮 Misi rahasiamu dimulai di sini. Enkripsi pesan, bagikan kunci dengan aman, lalu biarkan pesan menghilang.</p>
+<section class="en-pixel-hero">
+  <h1 class="en-pixel-title">LET'S PLAY EMBERNOTE</h1>
+  <p class="en-pixel-subtitle">Pesan dan foto rahasia yang hangus setelah dibaca</p>
+</section>
+<section class="en-dialog">
+  <h3>APA INI?</h3>
+  <p>EmberNote adalah aplikasi untuk mengirim pesan dan foto rahasia yang hanya bisa dibuka satu kali. Isinya dikunci dengan AES-256-GCM, jadi server tidak bisa membacanya, dan setelah dibuka langsung hangus.</p>
+</section>
+<h2>CARA MAIN</h2>
+<div class="en-pixel-grid">
+  <article class="en-pixel-card"><h3>1. LEVEL 1, BUAT PESAN</h3><p>Tulis pesan atau pilih foto, tentukan masa berlaku, lalu klik enkripsi. Kamu mendapat ID dan Kunci.</p></article>
+  <article class="en-pixel-card"><h3>2. BAGIKAN</h3><p>Kirim ID dan Kunci lewat jalur berbeda (misalnya ID lewat WhatsApp, Kunci lewat email).</p></article>
+  <article class="en-pixel-card"><h3>3. LEVEL 2, BACA PESAN</h3><p>Penerima memasukkan ID dan Kunci. Pesan terbuka sekali, lalu hilang dari server.</p></article>
 </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.button("▶️ PLAY / MULAI", type="primary", on_click=go_to_create)
-
-    st.subheader("💡 Apa ini?")
-    st.markdown(
-        """
-<div class="en-card">
-  <p>EmberNote mengirim pesan atau foto rahasia yang dilindungi enkripsi. Pesan hanya bisa dibuka sekali, lalu dihapus dari server. Server menyimpan data terenkripsi, jadi tidak bisa membaca isi pesan tanpa kuncinya.</p>
+<h2>ATURAN MAIN</h2>
+<div class="en-pixel-grid">
+  <article class="en-pixel-card en-rule-card"><h3>🔑 Kunci salah</h3><p>Ditolak, pesan tetap aman.</p></article>
+  <article class="en-pixel-card en-rule-card"><h3>🔥 Sekali baca</h3><p>Sudah dibuka atau kedaluwarsa: pesan tidak bisa dibuka lagi.</p></article>
+  <article class="en-pixel-card en-rule-card"><h3>🖼️ Foto</h3><p>PNG, JPG, atau WEBP, maksimal 2 MB.</p></article>
 </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.subheader("🗺️ Cara main")
-    st.markdown(
-        """
-<div class="en-missions">
-  <div class="en-card"><h3>🎯 Misi 1</h3><p>Tulis pesan dan/atau pilih foto untuk dienkripsi.</p></div>
-  <div class="en-card"><h3>🧩 Misi 2</h3><p>Bagikan ID dan Kunci lewat dua jalur berbeda.</p></div>
-  <div class="en-card"><h3>🔥 Misi 3</h3><p>Penerima buka sekali, lalu pesan hangus.</p></div>
-</div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.subheader("⚡ Booster keamanan")
-    st.markdown(
-        """
+<h2>POWER-UPS</h2>
 <div class="en-stats">
-  <div class="en-card en-stat"><strong>🔐 AES-256-GCM</strong><span>Enkripsi terautentikasi</span></div>
-  <div class="en-card en-stat"><strong>🗝️ 256-bit</strong><span>Kunci acak</span></div>
-  <div class="en-card en-stat"><strong>🔥 Sekali baca</strong><span>Lalu dihapus</span></div>
-  <div class="en-card en-stat"><strong>⭐ 13 pengujian</strong><span>Bukti keamanan</span></div>
+  <div class="en-stat-card"><strong>🔐 AES-256-GCM</strong><span>Enkripsi terautentikasi</span></div>
+  <div class="en-stat-card"><strong>🗝️ 256-bit</strong><span>Kunci rahasia</span></div>
+  <div class="en-stat-card"><strong>🔥 Sekali baca</strong><span>Lalu hangus</span></div>
+  <div class="en-stat-card"><strong>⭐ 13 pengujian</strong><span>Bukti keamanan</span></div>
 </div>
-<p class="en-note">📚 EmberNote adalah proyek pembelajaran kriptografi, bukan alat keamanan untuk produksi.</p>
         """,
         unsafe_allow_html=True,
     )
+    with st.container(key="home-actions"):
+        left, right = st.columns(2)
+        with left:
+            st.button("▶ MULAI", type="primary", on_click=go_to_create, key="home_start")
+        with right:
+            st.button("📖 BACA PESAN", key="home_read", on_click=go_to_read)
+    st.markdown('<div class="en-grass"></div>', unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------- Buat pesan
 def page_create():
-    st.title("🏅 Level 1 · Buat Pesan")
-    st.caption("🔥 Buat Pesan Rahasia Sekali Baca")
+    st.title("LEVEL 1")
+    st.subheader("Buat Pesan")
     st.caption("Pesan dan/atau foto dienkripsi dengan AES-256-GCM, dibuka sekali, lalu hangus.")
 
     with st.form("form_buat", clear_on_submit=True):
         text = st.text_area("Pesan rahasia / deskripsi foto", max_chars=MAX_CHARS, height=150)
         photo = st.file_uploader("Foto (opsional, PNG/JPG/WEBP, maks 2 MB)",
                                  type=["png", "jpg", "jpeg", "webp"])
-        label = st.selectbox("Masa berlaku pesan", list(DURATIONS))
-        submitted = st.form_submit_button("🔒 Enkripsi & buat pesan", type="primary")
+        label = st.selectbox("CHOOSE YOUR CHARACTER · Masa berlaku pesan", list(DURATIONS))
+        submitted = st.form_submit_button("▶ ENKRIPSI & BUAT PESAN", type="primary")
 
     if submitted:
         try:
@@ -140,9 +151,9 @@ def page_create():
 
     what = "Pesan dan foto" if created.get("has_photo") else "Pesan"
     st.success(f"{what} terenkripsi dan tersimpan. Kirim ID dan kunci lewat jalur yang BERBEDA.")
-    st.markdown("**ID Pesan** (boleh dikirim lewat chat biasa)")
+    st.markdown('<div class="en-dialog"><h3>ID PESAN</h3><p>Kirim lewat chat biasa.</p></div>', unsafe_allow_html=True)
     st.code(created["id"], language=None)
-    st.markdown("**Kunci Rahasia** (kirim lewat jalur lain; hanya ditampilkan sekarang)")
+    st.markdown('<div class="en-dialog"><h3>KUNCI RAHASIA</h3><p>Kirim lewat jalur lain. Kunci hanya ditampilkan sekarang.</p></div>', unsafe_allow_html=True)
     st.code(created["key"], language=None)
     st.info(
         f"Berlaku sampai {fmt_time(created['exp'])}. Tautan langsung ke halaman baca: "
@@ -174,11 +185,15 @@ def page_create():
 
 # ---------------------------------------------------------------- Baca pesan
 def page_read():
-    st.title("🏅 Level 2 · Baca Pesan")
-    st.caption("📖 Baca Pesan Rahasia")
+    st.title("LEVEL 2")
+    st.subheader("Baca Pesan")
 
     revealed = st.session_state.get("revealed")
     if revealed is not None:
+        st.markdown(
+            '<div class="st-key-game-over">GAME OVER: PESAN SUDAH HANGUS</div>',
+            unsafe_allow_html=True,
+        )
         st.success("Pesan berhasil dibuka dan SUDAH DIHAPUS dari server. Simpan jika perlu.")
         if revealed["image"]:
             st.image(revealed["image"], caption="Foto rahasia")
@@ -192,7 +207,7 @@ def page_read():
     with st.form("form_baca"):
         msg_id = st.text_input("ID Pesan", value=st.query_params.get("id", ""))
         key_text = st.text_input("Kunci Rahasia", type="password")
-        submitted = st.form_submit_button("🔓 Buka pesan (hanya bisa sekali)", type="primary")
+        submitted = st.form_submit_button("▶ BUKA PESAN (HANYA SEKALI)", type="primary")
 
     if not submitted:
         return
@@ -221,17 +236,18 @@ def page_read():
 
 # ----------------------------------------------------------- Bukti keamanan
 def page_proof():
-    st.title("🏆 Achievements · Bukti Keamanan")
+    st.title("RULES!")
+    st.subheader("Bukti Keamanan")
     st.write(
         "Halaman ini menjalankan pengujian langsung untuk menunjukkan bahwa **satu algoritma, "
         "AES-256-GCM, sudah mencukupi**: menjaga kerahasiaan teks dan foto, mendeteksi data yang "
         "diubah, dan melindungi metadata, tanpa hash atau cipher tambahan."
     )
-    if st.button("▶️ Jalankan semua pengujian", type="primary"):
+    if st.button("▶ JALANKAN SEMUA PENGUJIAN", type="primary"):
         results = run_security_tests()
         passed = sum(r["Hasil"] == "LULUS" for r in results)
         (st.success if passed == len(results) else st.error)(
-            f"{passed} dari {len(results)} pengujian lulus."
+            f"SCORE: {passed}/{len(results)} · {passed} dari {len(results)} pengujian lulus."
         )
         for index in range(0, len(results), 2):
             columns = st.columns(2)
@@ -240,7 +256,9 @@ def page_proof():
                     with st.container(border=True, key=f"proof-result-{index + offset}"):
                         passed_test = result["Hasil"] == "LULUS"
                         st.subheader(f"{'⭐' if passed_test else '⚠️'} {result['Pengujian']}")
-                        (st.success if passed_test else st.error)(result["Hasil"])
+                        (st.success if passed_test else st.error)(
+                            "🏅 LULUS" if passed_test else "❌ GAGAL"
+                        )
                         st.caption(result["Keterangan"])
 
 
@@ -269,34 +287,47 @@ def page_about():
     st.subheader("⚠️ Batasan & ancaman yang tidak ditangani")
     st.markdown(
         """
-<div class="en-limits">
-  <div class="en-card"><h3>🖥️ Bukan E2EE murni</h3><p>Kunci dibuat dan dipakai di server saat pesan dibuat atau dibuka.</p></div>
-  <div class="en-card"><h3>🗝️ Jaga kuncinya</h3><p>Siapa pun yang memegang ID dan kunci dapat membuka pesan. Kirim keduanya lewat jalur berbeda.</p></div>
-  <div class="en-card"><h3>👀 Metadata terlihat</h3><p>Panjang pesan, ukuran foto, ID, dan waktu tidak tersembunyi.</p></div>
-  <div class="en-card"><h3>📷 Metadata foto</h3><p>EXIF atau lokasi di foto tidak dibersihkan; hapus terlebih dahulu bila perlu.</p></div>
-  <div class="en-card"><h3>🚦 Batas percobaan</h3><p>Belum ada pembatasan spam atau percobaan; menebak kunci 256-bit tetap tidak praktis.</p></div>
-  <div class="en-card"><h3>☁️ Penyimpanan sementara</h3><p>Penyimpanan Streamlit Cloud bersifat sementara.</p></div>
-  <div class="en-card"><h3>📱 Sesi browser</h3><p>Plaintext tetap ada di sesi browser sampai pesan ditutup.</p></div>
-  <div class="en-card"><h3>🔎 Belum diaudit</h3><p>Aplikasi belum diaudit oleh pihak independen.</p></div>
+<div class="en-pixel-grid">
+  <div class="en-pixel-card"><h3>🖥️ Bukan E2EE murni</h3><p>Kunci dibuat dan dipakai di server saat pesan dibuat atau dibuka.</p></div>
+  <div class="en-pixel-card"><h3>🗝️ Jaga kuncinya</h3><p>Siapa pun yang memegang ID dan kunci dapat membuka pesan. Kirim keduanya lewat jalur berbeda.</p></div>
+  <div class="en-pixel-card"><h3>👀 Metadata terlihat</h3><p>Panjang pesan, ukuran foto, ID, dan waktu tidak tersembunyi.</p></div>
+  <div class="en-pixel-card"><h3>📷 Metadata foto</h3><p>EXIF atau lokasi di foto tidak dibersihkan; hapus terlebih dahulu bila perlu.</p></div>
+  <div class="en-pixel-card"><h3>🚦 Batas percobaan</h3><p>Belum ada pembatasan spam atau percobaan; menebak kunci 256-bit tetap tidak praktis.</p></div>
+  <div class="en-pixel-card"><h3>☁️ Penyimpanan sementara</h3><p>Penyimpanan Streamlit Cloud bersifat sementara.</p></div>
+  <div class="en-pixel-card"><h3>📱 Sesi browser</h3><p>Plaintext tetap ada di sesi browser sampai pesan ditutup.</p></div>
+  <div class="en-pixel-card"><h3>🔎 Belum diaudit</h3><p>Aplikasi belum diaudit oleh pihak independen.</p></div>
 </div>
         """,
         unsafe_allow_html=True,
     )
+    st.markdown('<div class="en-footer">THANK YOU<br>PRESS START TO PLAY AGAIN</div><div class="en-grass"></div>', unsafe_allow_html=True)
 
 
 if "page" not in st.session_state:
     st.session_state.page = PAGES[2] if "id" in st.query_params else PAGES[0]
+if "sidebar_page" not in st.session_state:
+    st.session_state.sidebar_page = st.session_state.page
+if "top_page" not in st.session_state:
+    st.session_state.top_page = st.session_state.page
 
 st.markdown(
     """
 <div class="en-navbar-brand">
-  <strong>🔥 EmberNote</strong>
-  <span>Pesan &amp; foto rahasia · AES-256-GCM</span>
+  <strong>★ EMBERNOTE ★</strong>
+  <span>8-BIT SECRET MESSAGE QUEST</span>
 </div>
     """,
     unsafe_allow_html=True,
 )
-choice = st.radio("Menu", PAGES, key="page", horizontal=True, label_visibility="collapsed")
+choice = st.radio(
+    "MENU", PAGES, key="top_page", horizontal=True,
+    label_visibility="collapsed", on_change=sync_top_page,
+)
+st.sidebar.markdown(
+    '<div class="en-navbar-brand"><strong>★ MENU ★</strong><span>CHOOSE YOUR LEVEL</span></div>',
+    unsafe_allow_html=True,
+)
+st.sidebar.radio("MENU", PAGES, key="sidebar_page", on_change=sync_sidebar_page)
 
 {
     PAGES[0]: page_home,
