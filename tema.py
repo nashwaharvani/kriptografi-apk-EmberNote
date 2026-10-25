@@ -112,8 +112,15 @@ div[class*="st-key-home-actions"] [data-testid="stColumn"] {
 }
 div[data-testid="stRadio"] > div[role="radiogroup"] {
   display: flex; flex-direction: row; flex-wrap: wrap; gap: .35rem;
+  justify-content: center;
   padding: .5rem; border: 4px solid #000; border-radius: 0;
   background: var(--pixel-pink); box-shadow: 4px 4px 0 #000;
+}
+div[class*="st-key-top_page"] > div[data-testid="stRadio"] > div[role="radiogroup"] {
+  width: 100%; box-sizing: border-box; justify-content: center;
+}
+div[class*="st-key-top_page"], div[class*="st-key-top_page"] > div[data-testid="stRadio"] {
+  width: 100%;
 }
 div[data-testid="stRadio"] label {
   margin: 0 !important; padding: .35rem .55rem !important;

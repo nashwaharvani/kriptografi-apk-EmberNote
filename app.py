@@ -310,15 +310,6 @@ if "sidebar_page" not in st.session_state:
 if "top_page" not in st.session_state:
     st.session_state.top_page = st.session_state.page
 
-st.markdown(
-    """
-<div class="en-navbar-brand">
-  <strong>★ EMBERNOTE ★</strong>
-  <span>8-BIT SECRET MESSAGE QUEST</span>
-</div>
-    """,
-    unsafe_allow_html=True,
-)
 choice = st.radio(
     "MENU", PAGES, key="top_page", horizontal=True,
     label_visibility="collapsed", on_change=sync_top_page,
