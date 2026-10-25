@@ -28,24 +28,16 @@ def fmt_time(ts: int) -> str:
 
 def go_to_create() -> None:
     st.session_state.page = PAGES[1]
-    st.session_state.sidebar_page = PAGES[1]
     st.session_state.top_page = PAGES[1]
 
 
 def go_to_read() -> None:
     st.session_state.page = PAGES[2]
-    st.session_state.sidebar_page = PAGES[2]
     st.session_state.top_page = PAGES[2]
 
 
 def sync_top_page() -> None:
     st.session_state.page = st.session_state.top_page
-    st.session_state.sidebar_page = st.session_state.top_page
-
-
-def sync_sidebar_page() -> None:
-    st.session_state.page = st.session_state.sidebar_page
-    st.session_state.top_page = st.session_state.sidebar_page
 
 
 def run_security_tests():
@@ -305,8 +297,6 @@ def page_about():
 
 if "page" not in st.session_state:
     st.session_state.page = PAGES[2] if "id" in st.query_params else PAGES[0]
-if "sidebar_page" not in st.session_state:
-    st.session_state.sidebar_page = st.session_state.page
 if "top_page" not in st.session_state:
     st.session_state.top_page = st.session_state.page
 
@@ -314,11 +304,6 @@ choice = st.radio(
     "MENU", PAGES, key="top_page", horizontal=True,
     label_visibility="collapsed", on_change=sync_top_page,
 )
-st.sidebar.markdown(
-    '<div class="en-navbar-brand"><strong>★ MENU ★</strong><span>CHOOSE YOUR LEVEL</span></div>',
-    unsafe_allow_html=True,
-)
-st.sidebar.radio("MENU", PAGES, key="sidebar_page", on_change=sync_sidebar_page)
 
 {
     PAGES[0]: page_home,

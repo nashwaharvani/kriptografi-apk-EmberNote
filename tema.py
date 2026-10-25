@@ -26,8 +26,8 @@ html, body, [class*="css"] { font-family: "VT323", monospace; }
   background-size: 32px 32px, 48px 48px, auto;
   background-attachment: fixed;
 }
-.block-container { max-width: 1000px; padding-top: 1.2rem; padding-bottom: 3rem; }
-h1, h2, h3, .en-pixel-title, .en-navbar-brand strong,
+.block-container { max-width: 1000px; padding-top: 5rem; padding-bottom: 3rem; }
+h1, h2, h3, .en-pixel-title,
 .stButton button, div[data-testid="stFormSubmitButton"] button {
   font-family: "Press Start 2P", "Courier New", monospace !important;
   line-height: 1.6 !important;
@@ -48,14 +48,6 @@ p, li, label, .stMarkdown, .stCaption, .stAlert, [data-testid="stWidgetLabel"] {
   font-size: 1.25rem;
   line-height: 1.35;
 }
-.en-navbar-brand {
-  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-  padding: .7rem .9rem; margin-bottom: .55rem; color: var(--pixel-white);
-  border: 4px solid var(--pixel-black); border-radius: 0;
-  background: var(--pixel-dark); box-shadow: 4px 4px 0 var(--pixel-black);
-}
-.en-navbar-brand strong { color: var(--pixel-yellow); font-size: .75rem; }
-.en-navbar-brand span { font-size: 1.2rem; }
 .en-pixel-hero {
   position: relative; padding: 1.3rem; margin: 1rem 0;
   text-align: center; color: var(--pixel-white);
@@ -131,13 +123,8 @@ div[data-testid="stRadio"] label[data-selected="true"] {
   color: var(--pixel-yellow) !important; border: 2px solid #000;
   background: var(--pixel-dark); box-shadow: 2px 2px 0 #000;
 }
-div[data-testid="stSidebar"] {
-  background: #35136c; border-right: 4px solid #000;
-}
-div[data-testid="stSidebar"] [data-testid="stVerticalBlock"] { gap: .75rem; }
-div[data-testid="stSidebar"] [data-testid="stRadio"] > div[role="radiogroup"] {
-  flex-direction: column; align-items: stretch;
-}
+section[data-testid="stSidebar"],
+div[data-testid="stSidebarCollapsedControl"] { display: none !important; }
 div[data-testid="stForm"], div[data-testid="stVerticalBlockBorderWrapper"] {
   padding: .75rem; border: 4px solid #000 !important; border-radius: 0 !important;
   background: var(--pixel-dark) !important; box-shadow: 4px 4px 0 #000 !important;
@@ -201,8 +188,7 @@ div[class*="st-key-game-over"] {
 }
 img { image-rendering: pixelated; }
 @media (max-width: 700px) {
-  .block-container { padding: .8rem .8rem 2.5rem; }
-  .en-navbar-brand { align-items: flex-start; flex-direction: column; gap: .2rem; }
+  .block-container { padding: 4.5rem .8rem 2.5rem; }
   .en-pixel-grid, .en-stats, .en-home-actions,
   div[class*="st-key-home-actions"] [data-testid="stHorizontalBlock"] {
     grid-template-columns: 1fr;
