@@ -27,6 +27,50 @@ html, body, [class*="css"] { font-family: "VT323", monospace; }
   background-attachment: fixed;
 }
 .block-container { max-width: 1000px; padding-top: 5rem; padding-bottom: 3rem; }
+@media (min-width: 1024px) {
+  body:has(.st-key-main-page) [data-testid="stMain"],
+  body:has(.st-key-main-page) [data-testid="stMainBlockContainer"],
+  body:has(.st-key-main-page) .stMainBlockContainer {
+    height: calc(100vh - 3rem); max-height: calc(100vh - 3rem);
+    overflow: hidden;
+  }
+  body:has(.st-key-main-page) [data-testid="stMain"] .block-container {
+    box-sizing: border-box; height: calc(100vh - 3rem);
+    max-height: calc(100vh - 3rem); padding-top: .35rem !important;
+    padding-bottom: .35rem !important; overflow: hidden;
+  }
+  body:has(.st-key-main-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"] {
+    display: flex; flex-direction: column; height: 100%; min-height: 0;
+  }
+  body:has(.st-key-main-page) [data-testid="stMainBlockContainer"] > [data-testid="stVerticalBlock"] > [data-testid="stLayoutWrapper"]:has(> .st-key-main-page) {
+    flex: 1; min-height: 0; overflow: hidden;
+  }
+  body:has(.st-key-main-page) .st-key-main-page {
+    display: flex; flex: 1; flex-direction: column; min-height: 0;
+    overflow: hidden; width: 100%;
+  }
+  body:has(.st-key-main-page) .st-key-main-page > [data-testid="stLayoutWrapper"]:has([data-testid="stHorizontalBlock"]) {
+    display: flex; flex: 1; min-height: 0; overflow: hidden;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stHorizontalBlock"] {
+    flex: 1; align-items: stretch; min-height: 0;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] {
+    display: flex; flex-direction: column; min-height: 0; overflow: hidden;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] > [data-testid="stVerticalBlock"] {
+    flex: 1; height: 100%; min-height: 0; overflow: hidden;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] > [data-testid="stVerticalBlock"] > [data-testid="stLayoutWrapper"]:has(.st-key-main-create-panel, .st-key-main-read-panel) {
+    display: flex; flex: 1; height: 100%; min-height: 0; overflow: hidden;
+  }
+  body:has(.st-key-main-page) .st-key-main-create-panel,
+  body:has(.st-key-main-page) .st-key-main-read-panel {
+    box-sizing: border-box; height: calc(100vh - 12rem);
+    max-height: calc(100vh - 12rem); min-height: 0; flex: 0 1 auto;
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  }
+}
 h1, h2, h3, .en-pixel-title,
 .stButton button, div[data-testid="stFormSubmitButton"] button {
   font-family: "Press Start 2P", "Courier New", monospace !important;
@@ -187,6 +231,99 @@ div[class*="st-key-game-over"] {
   box-shadow: 4px 4px 0 #000; text-shadow: 2px 2px 0 #fff;
 }
 img { image-rendering: pixelated; }
+body:has(.st-key-main-page) .st-key-main-page input,
+body:has(.st-key-main-page) .st-key-main-page textarea,
+body:has(.st-key-main-page) .st-key-main-page div[data-baseweb="select"] > div {
+  font-size: 1.05rem !important;
+}
+body:has(.st-key-main-page) .st-key-main-read-panel [data-testid="stImage"] img {
+  max-height: 28vh; object-fit: contain;
+}
+@media (min-width: 1024px) {
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stHeading"] h1 {
+    margin: .05rem 0 .35rem; padding: .2rem .45rem;
+    font-size: .72rem; line-height: 1.25 !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stVerticalBlock"] {
+    gap: .25rem;
+  }
+  body:has(.st-key-main-page) .st-key-main-page p,
+  body:has(.st-key-main-page) .st-key-main-page label,
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stWidgetLabel"] {
+    font-size: 1.05rem; line-height: 1.15;
+  }
+  body:has(.st-key-main-page) .st-key-main-page h3 {
+    margin: 0 0 .2rem; font-size: .62rem !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stVerticalBlockBorderWrapper"] {
+    padding: .45rem !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stForm"] {
+    padding: .4rem !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page textarea {
+    height: 80px !important; min-height: 80px !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stFileUploaderDropzone"] {
+    min-height: 44px; padding: .1rem .4rem;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stAlert"] {
+    padding: .3rem .45rem !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stCode"] pre,
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stCodeBlock"] pre {
+    padding: .35rem .5rem !important;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stButton"] button,
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stFormSubmitButton"] button {
+    min-height: 2.25rem; padding: .25rem .5rem;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stPopover"] > button {
+    min-height: 1.8rem; padding: .15rem .4rem; font-size: .55rem;
+  }
+}
+@media (max-width: 767px) {
+  body:has(.st-key-main-page) .stApp,
+  body:has(.st-key-main-page) [data-testid="stAppViewContainer"] {
+    height: auto; min-height: 100vh; overflow: visible;
+  }
+  body:has(.st-key-main-page) [data-testid="stMain"],
+  body:has(.st-key-main-page) [data-testid="stMainBlockContainer"],
+  body:has(.st-key-main-page) .stMainBlockContainer,
+  body:has(.st-key-main-page) [data-testid="stMain"] .block-container {
+    height: auto; max-height: none; overflow: visible;
+  }
+  body:has(.st-key-main-page) [data-testid="stMain"] .block-container {
+    padding-top: 4.5rem !important; padding-bottom: 2.5rem !important;
+  }
+  body:has(.st-key-main-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"],
+  body:has(.st-key-main-page) [data-testid="stMainBlockContainer"] > [data-testid="stVerticalBlock"] > [data-testid="stLayoutWrapper"]:has(> .st-key-main-page),
+  body:has(.st-key-main-page) .st-key-main-page,
+  body:has(.st-key-main-page) .st-key-main-page > [data-testid="stLayoutWrapper"]:has([data-testid="stHorizontalBlock"]) {
+    display: block; height: auto; min-height: 0; overflow: visible;
+  }
+  body:has(.st-key-main-page) .st-key-main-page > [data-testid="stLayoutWrapper"]:has([data-testid="stHorizontalBlock"]) {
+    flex: none;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stHorizontalBlock"] {
+    display: flex; flex-direction: column; gap: .75rem;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] {
+    display: block; width: 100% !important; min-width: 100% !important;
+    height: auto; overflow: visible;
+  }
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] > [data-testid="stVerticalBlock"],
+  body:has(.st-key-main-page) .st-key-main-page [data-testid="stColumn"] > [data-testid="stVerticalBlock"] > [data-testid="stLayoutWrapper"] {
+    display: block; height: auto; flex: none; overflow: visible;
+  }
+  body:has(.st-key-main-page) .st-key-main-create-panel,
+  body:has(.st-key-main-page) .st-key-main-read-panel {
+    height: auto; max-height: 62vh; flex: none; overflow-y: auto;
+  }
+  body:has(.st-key-main-page) .st-key-main-page textarea {
+    height: 80px !important; min-height: 80px !important;
+  }
+}
 @media (max-width: 700px) {
   .block-container { padding: 4.5rem .8rem 2.5rem; }
   .en-pixel-grid, .en-stats, .en-home-actions,
