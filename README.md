@@ -16,7 +16,7 @@ EmberNote/
 │   ├── storage.py       # penyimpanan SQLite (hanya ciphertext)
 │   └── selftest.py      # 13 pengujian otomatis (bukti keamanan)
 ├── .gitignore
-├── app.py               # aplikasi Streamlit (Beranda, Main, Bukti Keamanan, Tentang)
+├── app.py               # aplikasi Streamlit satu layar: Beranda, Main, Bukti Keamanan, Tentang
 ├── tema.py              # CSS dan komponen tampilan
 ├── laporan.ipynb        # notebook laporan: penjelasan, kode, pengujian, demo
 ├── README.md
