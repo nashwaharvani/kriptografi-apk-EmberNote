@@ -215,11 +215,12 @@ p, li, label, .stMarkdown, .stCaption, .stAlert, [data-testid="stWidgetLabel"] {
 div[data-testid="stTabs"] { min-height: 0; }
 div[data-testid="stTabs"] [role="tablist"] {
   min-height: 2.5rem; padding: .2rem; gap: .35rem;
+  justify-content: center; align-items: center;
   border: 3px solid #000; background: var(--pixel-pink); box-shadow: 3px 3px 0 #000;
 }
 div[data-testid="stTabs"] [role="tab"] {
-  height: 2rem; padding: .25rem .55rem; color: var(--pixel-dark);
-  font: .58rem "Press Start 2P", monospace;
+  height: 2.65rem; padding: .35rem .8rem; color: var(--pixel-dark);
+  font: .68rem "Press Start 2P", monospace;
 }
 div[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
   color: var(--pixel-yellow); background: var(--pixel-dark);
@@ -375,6 +376,53 @@ body:has(.st-key-main-page) .st-key-main-page div[data-baseweb="select"] > div {
 body:has(.st-key-main-page) .st-key-main-read-panel [data-testid="stImage"] img {
   max-height: 28vh; object-fit: contain;
 }
+body:has(.st-key-main-page) .st-key-main-read-panel textarea:disabled {
+  color: var(--pixel-dark) !important;
+  -webkit-text-fill-color: var(--pixel-dark) !important;
+  opacity: 1 !important;
+}
+@media (min-width: 768px) {
+  body:has(.st-key-proof-page),
+  body:has(.st-key-about-page) {
+    overflow: hidden;
+  }
+  body:has(.st-key-proof-page) .stApp,
+  body:has(.st-key-about-page) .stApp,
+  body:has(.st-key-proof-page) [data-testid="stAppViewContainer"],
+  body:has(.st-key-about-page) [data-testid="stAppViewContainer"] {
+    height: 100vh; max-height: 100vh; overflow: hidden;
+  }
+  body:has(.st-key-proof-page) [data-testid="stMain"],
+  body:has(.st-key-about-page) [data-testid="stMain"] {
+    flex: 1 1 auto; height: 100vh; min-height: 0; max-height: 100vh;
+    overflow-x: hidden; overflow-y: auto;
+  }
+  body:has(.st-key-proof-page) [data-testid="stMainBlockContainer"],
+  body:has(.st-key-about-page) [data-testid="stMainBlockContainer"],
+  body:has(.st-key-proof-page) [data-testid="stMain"] .block-container,
+  body:has(.st-key-about-page) [data-testid="stMain"] .block-container {
+    height: auto; min-height: 100%; max-height: none; overflow: visible;
+  }
+  body:has(.st-key-proof-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"],
+  body:has(.st-key-about-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"],
+  body:has(.st-key-proof-page) [data-testid="stTabs"],
+  body:has(.st-key-about-page) [data-testid="stTabs"],
+  body:has(.st-key-proof-page) [data-testid="stTabs"] > div:has([role="tabpanel"]),
+  body:has(.st-key-about-page) [data-testid="stTabs"] > div:has([role="tabpanel"]),
+  body:has(.st-key-proof-page) [data-testid="stTabs"] [role="tabpanel"],
+  body:has(.st-key-about-page) [data-testid="stTabs"] [role="tabpanel"],
+  body:has(.st-key-proof-page) [data-testid="stTabs"] [role="tabpanel"] > [data-testid="stVerticalBlock"],
+  body:has(.st-key-about-page) [data-testid="stTabs"] [role="tabpanel"] > [data-testid="stVerticalBlock"],
+  body:has(.st-key-proof-page) .st-key-proof-page,
+  body:has(.st-key-about-page) .st-key-about-page {
+    display: block; flex: none; height: auto; max-height: none;
+    min-height: 0; overflow: visible;
+  }
+  body:has(.st-key-proof-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"],
+  body:has(.st-key-about-page) [data-testid="stMain"] .block-container > [data-testid="stVerticalBlock"] {
+    height: auto;
+  }
+}
 @media (min-width: 1024px) {
   body:has(.st-key-main-page) .st-key-main-page [data-testid="stHeading"] h1 {
     margin: .05rem 0 .35rem; padding: .2rem .45rem;
@@ -433,7 +481,7 @@ body:has(.st-key-main-page) .st-key-main-read-panel [data-testid="stImage"] img 
     gap: .1rem; overflow-x: auto;
   }
   div[data-testid="stTabs"] [role="tab"] {
-    padding: .2rem .35rem; font-size: .45rem;
+    height: 2.2rem; padding: .25rem .4rem; font-size: .48rem;
   }
   .en-home-steps { grid-template-columns: 1fr; }
   .en-home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
