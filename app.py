@@ -66,22 +66,25 @@ def page_home():
     st.markdown(
         """
 <div class="en-home-screen">
-  <h1>EMBERNOTE</h1>
-  <section class="en-home-intro">
-    <h2>APA INI?</h2>
+  <section class="en-pixel-hero">
+    <h1 class="en-pixel-title">LET'S PLAY EMBERNOTE</h1>
+    <p class="en-pixel-subtitle">Pesan dan foto rahasia yang hangus setelah dibaca</p>
+  </section>
+  <section class="en-dialog">
+    <h3>APA INI?</h3>
     <p>EmberNote mengirim pesan dan foto rahasia yang hanya bisa dibuka satu kali. Semua isi dilindungi AES-256-GCM dan dihapus setelah dibaca.</p>
   </section>
   <h2>CARA MAIN</h2>
-  <div class="en-home-steps">
-    <article><h3>1 · BUAT</h3><p>Tulis pesan atau pilih foto, atur masa berlaku, lalu enkripsi.</p></article>
-    <article><h3>2 · BAGIKAN</h3><p>Kirim ID dan kunci melalui dua jalur yang berbeda.</p></article>
-    <article><h3>3 · BACA</h3><p>Masukkan ID dan kunci. Isi terbuka sekali lalu hangus.</p></article>
+  <div class="en-pixel-grid en-home-steps">
+    <article class="en-pixel-card"><h3>1. LEVEL 1, BUAT PESAN</h3><p>Tulis pesan atau pilih foto, tentukan masa berlaku, lalu enkripsi.</p></article>
+    <article class="en-pixel-card"><h3>2. BAGIKAN</h3><p>Kirim ID dan Kunci lewat jalur berbeda agar pesan tetap rahasia.</p></article>
+    <article class="en-pixel-card"><h3>3. LEVEL 2, BACA PESAN</h3><p>Penerima memasukkan ID dan Kunci. Pesan hangus setelah berhasil dibuka.</p></article>
   </div>
-  <div class="en-home-stats">
-    <div><strong>AES-256-GCM</strong><span>Terenkripsi</span></div>
-    <div><strong>256-bit</strong><span>Kunci acak</span></div>
-    <div><strong>SEKALI</strong><span>Baca lalu hangus</span></div>
-    <div><strong>13/13</strong><span>Uji keamanan</span></div>
+  <div class="en-stats">
+    <div class="en-stat-card"><strong>AES-256-GCM</strong><span>Terenkripsi</span></div>
+    <div class="en-stat-card"><strong>256-bit</strong><span>Kunci acak</span></div>
+    <div class="en-stat-card"><strong>SEKALI</strong><span>Baca lalu hangus</span></div>
+    <div class="en-stat-card"><strong>13/13</strong><span>Uji keamanan</span></div>
   </div>
 </div>
         """,
